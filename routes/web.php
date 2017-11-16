@@ -11,10 +11,22 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PagesController@index');
 
 Route::get('/castles', 'PagesController@castles');
 Route::get('/transformers', 'PagesController@transformers');
 Route::post('/castles/calculate', 'CastlesController@calculate');
+
+//Autobots
+Route::resource('autobots', 'AutobotsController',
+    ['except' => [
+        'create', 'edit'
+    ]]
+);
+
+//Decepticons
+Route::resource('decepticons', 'DecepticonsController',
+    ['except' => [
+        'create', 'edit'
+    ]]
+);

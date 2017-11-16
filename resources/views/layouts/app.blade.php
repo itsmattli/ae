@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="./css/main.css">
 
 
     <title>@yield('pageTitle')</title>
@@ -23,26 +24,25 @@
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
-
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
                         {{ config('app.name', 'aequilibrium') }}
                     </a>
                 </div>
 
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
+                <div>
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         <li><a href="/castles">Castles</a></li>
-                        <li><a href="/transformers">Transformers</a></li>
+                        <li><a data-toggle="collapse" href="#transformers">Transformers</a></li>
+                        <ul id="transformers" class="collapse nav navbar-nav">
+                            <li>
+                                <a href="/transformers">Roster</a>
+                            </li>
+                            <li>
+                                <a href="/battle">Battle</a>
+                            </li>
+                        </ul>
                     </ul>
                 </div>
             </div>

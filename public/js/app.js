@@ -32084,19 +32084,297 @@ var Launch = function (_Component) {
     function Launch() {
         _classCallCheck(this, Launch);
 
-        return _possibleConstructorReturn(this, (Launch.__proto__ || Object.getPrototypeOf(Launch)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Launch.__proto__ || Object.getPrototypeOf(Launch)).call(this));
+
+        _this.state = {
+            autobots: [],
+            decepticons: []
+        };
+        return _this;
     }
 
     _createClass(Launch, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            fetch('/autobots').then(function (results) {
+                return results.json();
+            }).then(function (data) {
+                console.log(data);
+                var autobots = data.map(function (autobot) {
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'tr',
+                        { key: autobot.id },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            autobot.name
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            autobot.strength
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            autobot.intelligence
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            autobot.endurance
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            autobot.rank
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            autobot.courage
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            autobot.firepower
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            autobot.skill
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'button',
+                                { className: 'btn btn-danger' },
+                                'Delete'
+                            )
+                        )
+                    );
+                });
+                _this2.setState({ autobots: autobots });
+            });
+
+            fetch('/decepticons').then(function (results) {
+                return results.json();
+            }).then(function (data) {
+                console.log(data);
+                var decepticons = data.map(function (decepticon) {
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'tr',
+                        { key: decepticon.id },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            decepticon.name
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            decepticon.strength
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            decepticon.intelligence
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            decepticon.endurance
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            decepticon.rank
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            decepticon.courage
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            decepticon.firepower
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            decepticon.skill
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'td',
+                            null,
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'button',
+                                { className: 'btn btn-danger' },
+                                'Delete'
+                            )
+                        )
+                    );
+                });
+                _this2.setState({ decepticons: decepticons });
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                null,
+                { className: 'row' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'h1',
-                    null,
-                    'Cool, it\'s working'
+                    'div',
+                    { className: 'col-lg-5 col-lg-offset-1' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'panel panel-default' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            { className: 'panel-heading' },
+                            'Autobots'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            { className: 'panel-body' },
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'table',
+                                { className: 'table' },
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'thead',
+                                    null,
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                        'tr',
+                                        { scope: 'row' },
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'Name'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'STR'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'INT'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'END'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'RNK'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'COUR'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'FIRE'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'SKL'
+                                        )
+                                    )
+                                ),
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'tbody',
+                                    null,
+                                    this.state.autobots
+                                )
+                            )
+                        )
+                    )
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'col-lg-5' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'panel panel-default' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            { className: 'panel-heading' },
+                            'Decepticons'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            { className: 'panel-body' },
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'table',
+                                { className: 'table' },
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'thead',
+                                    null,
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                        'tr',
+                                        { scope: 'row' },
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'Name'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'STR'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'INT'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'END'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'RNK'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'COUR'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'FIRE'
+                                        ),
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                            'td',
+                                            { scope: 'col' },
+                                            'SKL'
+                                        )
+                                    )
+                                ),
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'tbody',
+                                    null,
+                                    this.state.decepticons
+                                )
+                            )
+                        )
+                    )
                 )
             );
         }
