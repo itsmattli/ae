@@ -7,3 +7,4 @@
         <li><a href="/transformers">Transformers</a></li>
     </ul>
 </div>
+@endsection

@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/castles', 'PagesController@castles');
+Route::get('/transformers', 'PagesController@transformers');
