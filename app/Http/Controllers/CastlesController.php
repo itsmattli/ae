@@ -6,9 +6,6 @@ use Illuminate\Http\Request;
 
 class CastlesController extends Controller
 {
-    protected $castleCount = array();
-    protected $landscape = array();
-
     public function calculate(Request $req)
     {
         $landscape = $this->validateInput($req->landscape);
@@ -22,8 +19,8 @@ class CastlesController extends Controller
         $landscape = str_getcsv($input, $delimiter);
 
         foreach ($landscape as $elevation) {
-            if(!is_numeric($elevation)){
-                return redirect()->back()->with("error", "Sorry, only integer values are allowed");
+            if(!is_numeric($elevation) && $elevation >= 0){
+                return redirect()->back()->with("error", "Sorry, only positive integer values are allowed");
             }
         }
         return $landscape;
@@ -37,7 +34,7 @@ class CastlesController extends Controller
             //peak check
             if($landscape[$i] > $landscape[$i - 1]) {
                 //check for extended peak
-                while($index < count($landscape) && $landscape[$i] == $landscape[$index]){
+                while($index < count($landscape) - 1 && $landscape[$i] == $landscape[$index]){
                    $index++;
                 }
                 //make sure next value is lower
@@ -48,7 +45,7 @@ class CastlesController extends Controller
             } else if ($landscape[$i] < $landscape[$i - 1]) {
                 //valley check
                 //check for extended valley
-                while($index < count($landscape) && $landscape[$i] == $landscape[$index]){
+                while($index < count($landscape) - 1 && $landscape[$i] == $landscape[$index]){
                     $index++;
                 }
                 //make sure next value is higher
