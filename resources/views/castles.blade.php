@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('pageTitle', 'Matthew Li - Web Developer')
+@section('css')
+    <link rel="stylesheet" href="../css/castles.css">
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row">
