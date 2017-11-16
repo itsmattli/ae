@@ -17,3 +17,4 @@ Route::get('/', function () {
 
 Route::get('/castles', 'PagesController@castles');
 Route::get('/transformers', 'PagesController@transformers');
+Route::post('/castles/calculate', 'CastlesController@calculate');
