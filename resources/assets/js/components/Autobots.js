@@ -1,9 +1,6 @@
 /**
  * Created by Matthew on 2017-11-16.
  */
-/**
- * Created by Matthew on 2017-11-16.
- */
 import React, { Component } from 'react';
 
 class Autobots extends Component {

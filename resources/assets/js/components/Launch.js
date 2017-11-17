@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import Decepticons from './Decepticons.js'
 import Autobots from './Autobots.js'
+import BattleDisplay from './BattleDisplay.js'
 
 const customStyles = {
     content : {
@@ -17,6 +18,20 @@ const customStyles = {
     }
 };
 
+var status = {
+    AUTOBOT_WIN: -1,
+    BATTLE_ON: 0,
+    DECEPTICON_WIN: 1,
+    BOTH_DESTROYED: 2,
+    GAME_OVER: 3
+};
+
+var statDiff = {
+    AUTOBOT_OVERWHELMING: -1,
+    EVEN: 0,
+    DECEPTICON_OVERWHELMING: 1,
+}
+
 class Launch extends Component {
 
     constructor() {
@@ -25,7 +40,11 @@ class Launch extends Component {
             autobots: [],
             decepticons: [],
             createData: [],
+            victors: [],
+            survivors: [],
+            gameOver: false,
             modalIsOpen: false,
+            battleComplete: false,
         }
 
         this.openModal = this.openModal.bind(this);
@@ -127,26 +146,131 @@ class Launch extends Component {
             },
         }).then(response => {
             if(response.ok) {
-                this.getAutobots();
+                this.getAutobots()
             }
         })
     }
 
+    /**
+     * Battles opposing forces for galactic dominance
+     * @param e
+     */
     battle(e) {
-        e.preventDefault();
-        let decRoster = JSON.parse(this.state.decepticons)
-        let autRoster = JSON.parse(this.state.autobots)
-        let count = (decRoster.count() < autRoster.count()) ? decRoster.count : autRoster.count();
-        console.log(count);
-        console.log(autRoster)
-        console.log(decRoster)
+        e.preventDefault()
+        let decRoster = this.state.decepticons
+        let autRoster = this.state.autobots
+        let count = (decRoster.length < autRoster.length) ? decRoster.length : autRoster.length
+        let survivors = []
+        let victors = []
+
+        for (let i = 0; i < count; i++) {
+            let battleStatus = this.matrixOfLeadershipCheck(autRoster[i], decRoster[i])
+            if (battleStatus == status.BATTLE_ON) {
+                battleStatus = this.courStrSklCheck(autRoster[i], decRoster[i])
+            }
+            if (battleStatus == status.BATTLE_ON) {
+                battleStatus = this.overallMight(autRoster[i], decRoster[i])
+            }
+
+            switch (battleStatus) {
+                case status.AUTOBOT_WIN :
+                    victors.push(autRoster[i])
+                    break
+                case status.DECEPTICON_WIN :
+                    victors.push(decRoster[i])
+                    break
+                case status.GAME_OVER :
+                    this.setState({
+                        battleComplete: true,
+                        gameOver: true
+                    })
+                default: break
+            }
+        }
+        let longer = (decRoster.length < autRoster.length) ? autRoster : decRoster
+        for(let i = count; i < longer.length; i++) {
+            survivors.push(longer[i])
+        }
+        this.setState({
+            battleComplete: true,
+            gameOver : false
+        })
+    }
+
+    matrixOfLeadershipCheck(autobot, decepticon) {
+        if(autobot.name.toUpperCase() == "OPTIMUS PRIME" && decepticon.name.toUpperCase() == "PREDAKING") {
+            return status.GAME_OVER
+        } else if (autobot.name.toUpperCase() == "OPTIMUS PRIME") {
+            return status.AUTOBOT_WIN
+        } else if (decepticon.name.toUpperCase() == "PREDAKING") {
+            return status.DECEPTICON_WIN
+        } else {
+            return status.BATTLE_ON
+        }
     }
 
 
+    courStrSklCheck(autobot, decepticon) {
+        let courDiff = autobot.courage - decepticon.courage
+        let strDiff = autobot.strength - decepticon.strength
+        let sklDiff = autobot.skill - decepticon.skill
+        let courCheck = 0, strCheck = 0, sklCheck = 0
+        if(courDiff <= -4) {
+            courCheck = statDiff.DECEPTICON_OVERWHELMING
+        } else if (courDiff >= 4) {
+            courCheck = statDiff.AUTOBOT_OVERWHELMING
+        } else {
+            courCheck = statDiff.EVEN
+        }
+
+        if (strDiff <= -3) {
+            strCheck = statDiff.DECEPTICON_OVERWHELMING
+        } else if (courDiff >= 3) {
+            strCheck = statDiff.AUTOBOT_OVERWHELMING
+        } else {
+            strCheck = statDiff.EVEN
+        }
+
+        switch (strCheck + courCheck) {
+            case -2 :
+            case -1 :
+                return status.AUTOBOT_WIN
+                break
+            case 1 :
+            case 2 :
+                return status.DECEPTICON_WIN
+                break
+            case 0:
+                if(sklDiff <= -3) {
+                    return status.DECEPTICON_WIN
+                } else if (sklDiff >= 3) {
+                    return status.AUTOBOT_WIN
+                } else {
+                    return status.BATTLE_ON
+                }
+            default: break
+        }
+    }
+
+    overallMight(autobot, decepticon){
+        let overallAut = autobot.strength + autobot.intelligence + autobot.speed + autobot.endurance + autobot.firepower
+        let overallDec = decepticon.strength + decepticon.intelligence + decepticon.speed + decepticon.endurance + decepticon.firepower
+        if (overallAut == overallDec) {
+            return status.BOTH_DESTROYED
+        } else if (overallAut > overallDec) {
+            return status.AUTOBOT_WIN
+        } else {
+            return status.DECEPTICON_WIN
+        }
+    }
+
+
+
     render() {
+        const battleComplete = this.state.battleComplete
         return (
             <div>
-                <div class="row">
+                <div className="row">
                     <div className="create">
                         <button className="btn btn-primary" onClick={this.openModal}>Create Transformer</button>
                     </div>
@@ -233,6 +357,15 @@ class Launch extends Component {
                         deleteDecepticon={this.deleteDecepticon.bind(this)}
                     />
                 </div>
+                {battleComplete &&
+                    <div className="row">
+                        <BattleDisplay
+                            victors={this.state.victors}
+                            survivors={this.state.survivors}
+                            gameOver={this.state.gameOver}
+                        />
+                    </div>
+                }
             </div>
         );
     }

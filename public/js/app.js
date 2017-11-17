@@ -32071,6 +32071,7 @@ module.exports = function spread(callback) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_modal__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Decepticons_js__ = __webpack_require__(88);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Autobots_js__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__BattleDisplay_js__ = __webpack_require__(90);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -32078,6 +32079,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -32098,6 +32100,20 @@ var customStyles = {
     }
 };
 
+var status = {
+    AUTOBOT_WIN: -1,
+    BATTLE_ON: 0,
+    DECEPTICON_WIN: 1,
+    BOTH_DESTROYED: 2,
+    GAME_OVER: 3
+};
+
+var statDiff = {
+    AUTOBOT_OVERWHELMING: -1,
+    EVEN: 0,
+    DECEPTICON_OVERWHELMING: 1
+};
+
 var Launch = function (_Component) {
     _inherits(Launch, _Component);
 
@@ -32110,7 +32126,11 @@ var Launch = function (_Component) {
             autobots: [],
             decepticons: [],
             createData: [],
-            modalIsOpen: false
+            victors: [],
+            survivors: [],
+            gameOver: false,
+            modalIsOpen: false,
+            battleComplete: false
         };
 
         _this.openModal = _this.openModal.bind(_this);
@@ -32256,26 +32276,138 @@ var Launch = function (_Component) {
                 }
             });
         }
+
+        /**
+         * Battles opposing forces for galactic dominance
+         * @param e
+         */
+
     }, {
         key: 'battle',
         value: function battle(e) {
             e.preventDefault();
-            var decRoster = JSON.parse(this.state.decepticons);
-            var autRoster = JSON.parse(this.state.autobots);
-            var count = decRoster.count() < autRoster.count() ? decRoster.count : autRoster.count();
-            console.log(count);
-            console.log(autRoster);
-            console.log(decRoster);
+            var decRoster = this.state.decepticons;
+            var autRoster = this.state.autobots;
+            var count = decRoster.length < autRoster.length ? decRoster.length : autRoster.length;
+            var survivors = [];
+            var victors = [];
+
+            for (var i = 0; i < count; i++) {
+                var battleStatus = this.matrixOfLeadershipCheck(autRoster[i], decRoster[i]);
+                if (battleStatus == status.BATTLE_ON) {
+                    battleStatus = this.courStrSklCheck(autRoster[i], decRoster[i]);
+                }
+                if (battleStatus == status.BATTLE_ON) {
+                    battleStatus = this.overallMight(autRoster[i], decRoster[i]);
+                }
+
+                switch (battleStatus) {
+                    case status.AUTOBOT_WIN:
+                        victors.push(autRoster[i]);
+                        break;
+                    case status.DECEPTICON_WIN:
+                        victors.push(decRoster[i]);
+                        break;
+                    case status.GAME_OVER:
+                        this.setState({
+                            battleComplete: true,
+                            gameOver: true
+                        });
+                    default:
+                        break;
+                }
+            }
+            var longer = decRoster.length < autRoster.length ? autRoster : decRoster;
+            for (var _i = count; _i < longer.length; _i++) {
+                survivors.push(longer[_i]);
+            }
+            this.setState({
+                battleComplete: true,
+                gameOver: false
+            });
+        }
+    }, {
+        key: 'matrixOfLeadershipCheck',
+        value: function matrixOfLeadershipCheck(autobot, decepticon) {
+            if (autobot.name.toUpperCase() == "OPTIMUS PRIME" && decepticon.name.toUpperCase() == "PREDAKING") {
+                return status.GAME_OVER;
+            } else if (autobot.name.toUpperCase() == "OPTIMUS PRIME") {
+                return status.AUTOBOT_WIN;
+            } else if (decepticon.name.toUpperCase() == "PREDAKING") {
+                return status.DECEPTICON_WIN;
+            } else {
+                return status.BATTLE_ON;
+            }
+        }
+    }, {
+        key: 'courStrSklCheck',
+        value: function courStrSklCheck(autobot, decepticon) {
+            var courDiff = autobot.courage - decepticon.courage;
+            var strDiff = autobot.strength - decepticon.strength;
+            var sklDiff = autobot.skill - decepticon.skill;
+            var courCheck = 0,
+                strCheck = 0,
+                sklCheck = 0;
+            if (courDiff <= -4) {
+                courCheck = statDiff.DECEPTICON_OVERWHELMING;
+            } else if (courDiff >= 4) {
+                courCheck = statDiff.AUTOBOT_OVERWHELMING;
+            } else {
+                courCheck = statDiff.EVEN;
+            }
+
+            if (strDiff <= -3) {
+                strCheck = statDiff.DECEPTICON_OVERWHELMING;
+            } else if (courDiff >= 3) {
+                strCheck = statDiff.AUTOBOT_OVERWHELMING;
+            } else {
+                strCheck = statDiff.EVEN;
+            }
+
+            switch (strCheck + courCheck) {
+                case -2:
+                case -1:
+                    return status.AUTOBOT_WIN;
+                    break;
+                case 1:
+                case 2:
+                    return status.DECEPTICON_WIN;
+                    break;
+                case 0:
+                    if (sklDiff <= -3) {
+                        return status.DECEPTICON_WIN;
+                    } else if (sklDiff >= 3) {
+                        return status.AUTOBOT_WIN;
+                    } else {
+                        return status.BATTLE_ON;
+                    }
+                default:
+                    break;
+            }
+        }
+    }, {
+        key: 'overallMight',
+        value: function overallMight(autobot, decepticon) {
+            var overallAut = autobot.strength + autobot.intelligence + autobot.speed + autobot.endurance + autobot.firepower;
+            var overallDec = decepticon.strength + decepticon.intelligence + decepticon.speed + decepticon.endurance + decepticon.firepower;
+            if (overallAut == overallDec) {
+                return status.BOTH_DESTROYED;
+            } else if (overallAut > overallDec) {
+                return status.AUTOBOT_WIN;
+            } else {
+                return status.DECEPTICON_WIN;
+            }
         }
     }, {
         key: 'render',
         value: function render() {
+            var battleComplete = this.state.battleComplete;
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { 'class': 'row' },
+                    { className: 'row' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
                         { className: 'create' },
@@ -32469,6 +32601,15 @@ var Launch = function (_Component) {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Decepticons_js__["a" /* default */], {
                         data: this.state.decepticons,
                         deleteDecepticon: this.deleteDecepticon.bind(this)
+                    })
+                ),
+                battleComplete && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'row' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__BattleDisplay_js__["a" /* default */], {
+                        victors: this.state.victors,
+                        survivors: this.state.survivors,
+                        gameOver: this.state.gameOver
                     })
                 )
             );
@@ -52124,9 +52265,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * Created by Matthew on 2017-11-16.
  */
-/**
- * Created by Matthew on 2017-11-16.
- */
 
 
 var Autobots = function (_Component) {
@@ -52310,6 +52448,87 @@ var Autobots = function (_Component) {
 }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
 
 /* harmony default export */ __webpack_exports__["a"] = (Autobots);
+
+/***/ }),
+/* 90 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * Created by Matthew on 2017-11-17.
+ */
+
+
+var BattleDisplay = function (_Component) {
+    _inherits(BattleDisplay, _Component);
+
+    function BattleDisplay(props) {
+        _classCallCheck(this, BattleDisplay);
+
+        var _this = _possibleConstructorReturn(this, (BattleDisplay.__proto__ || Object.getPrototypeOf(BattleDisplay)).call(this, props));
+
+        _this.state = {
+            survivors: [],
+            victors: [],
+            gameOver: [],
+            display: []
+        };
+        return _this;
+    }
+
+    _createClass(BattleDisplay, [{
+        key: "componentWillReceiveProps",
+        value: function componentWillReceiveProps(props) {
+            this.setState({
+                survivors: props.survivors,
+                victors: props.victors,
+                gameOver: props.gameOver
+            });
+        }
+    }, {
+        key: "processDisplay",
+        value: function processDisplay() {
+            var gameOver = this.state.gameOver;
+            var survivors = this.state.survivors;
+            var victors = this.state.victors;
+            if (gameOver) {
+                var display = function display() {
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        "div",
+                        null,
+                        "working"
+                    );
+                };
+                this.setState({
+                    display: display
+                });
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                "div",
+                { className: "col-sm-6" },
+                this.state.display
+            );
+        }
+    }]);
+
+    return BattleDisplay;
+}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
+
+/* harmony default export */ __webpack_exports__["a"] = (BattleDisplay);
 
 /***/ })
 /******/ ]);
