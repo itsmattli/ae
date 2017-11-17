@@ -33234,7 +33234,7 @@ var customStyles = {
         bottom: 'auto',
         marginRight: '-25%',
         transform: 'translate(-50%, -50%)',
-        height: '400px',
+        height: '450px',
         width: '700px'
     }
 };
@@ -33267,6 +33267,7 @@ var Launch = function (_Component) {
             createData: [],
             victors: [],
             survivors: [],
+            battles: 0,
             gameOver: false,
             modalIsOpen: false,
             battleComplete: false
@@ -33470,6 +33471,7 @@ var Launch = function (_Component) {
     }, {
         key: 'battle',
         value: function battle(e) {
+            var battles = 0;
             e.preventDefault();
             var decRoster = this.state.decepticons;
             var autRoster = this.state.autobots;
@@ -33478,6 +33480,7 @@ var Launch = function (_Component) {
             var victors = [];
 
             for (var i = 0; i < count; i++) {
+                battles++;
                 var battleStatus = this.matrixOfLeadershipCheck(autRoster[i], decRoster[i]);
                 if (battleStatus == status.BATTLE_ON) {
                     battleStatus = this.courStrSklCheck(autRoster[i], decRoster[i]);
@@ -33494,8 +33497,8 @@ var Launch = function (_Component) {
                         victors.push(decRoster[i]);
                         break;
                     case status.GAME_OVER:
-                        console.log("game over");
                         this.setState({
+                            battles: battles,
                             battleComplete: true,
                             gameOver: true
                         });
@@ -33509,6 +33512,7 @@ var Launch = function (_Component) {
                 survivors.push(longer[_i]);
             }
             this.setState({
+                battles: battles,
                 battleComplete: true,
                 gameOver: false,
                 victors: victors,
@@ -33821,7 +33825,8 @@ var Launch = function (_Component) {
                 battleComplete && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__BattleDisplay_js__["a" /* default */], {
                     victors: this.state.victors,
                     survivors: this.state.survivors,
-                    gameOver: this.state.gameOver
+                    gameOver: this.state.gameOver,
+                    battles: this.state.battles
                 })
             );
         }
@@ -53218,7 +53223,8 @@ var BattleDisplay = function (_Component) {
         _this.state = {
             survivors: props.survivors,
             victors: props.victors,
-            gameOver: props.gameOver
+            gameOver: props.gameOver,
+            battles: props.battles
         };
         return _this;
     }
@@ -53229,7 +53235,8 @@ var BattleDisplay = function (_Component) {
             this.setState({
                 survivors: props.survivors,
                 victors: props.victors,
-                gameOver: props.gameOver
+                gameOver: props.gameOver,
+                battles: props.battles
             });
         }
     }, {
@@ -53238,11 +53245,11 @@ var BattleDisplay = function (_Component) {
             var gameOver = this.state.gameOver;
             var survivors = this.state.survivors;
             var victors = this.state.victors;
+            var battles = this.state.battles;
             var autoVic = 0;
             var autoVicString = "";
             var decVic = 0;
             var decVicString = "";
-            var battles = 0;
             var survivorsString = "";
             var victoryString = "";
             var display = [];
@@ -53292,7 +53299,6 @@ var BattleDisplay = function (_Component) {
                     }
                 }
                 if (autoVic > decVic) {
-                    battles = autoVic;
                     victoryString = "Winning Team(Autobots): " + autoVicString;
                     videoId = "A52--FKUQgU";
                     for (var _i = 0; _i < survivors.length; _i++) {
@@ -53301,7 +53307,6 @@ var BattleDisplay = function (_Component) {
                         }
                     }
                 } else if (decVic > autoVic) {
-                    battles = decVic;
                     victoryString = "Winning Team(Decepticon): " + decVicString;
                     videoId = "VMUjcr87XfM";
                     for (var _i2 = 0; _i2 < survivors.length; _i2++) {
@@ -53310,7 +53315,6 @@ var BattleDisplay = function (_Component) {
                         }
                     }
                 } else {
-                    battles = autoVic;
                     victoryString = "Tie!";
                     videoId = null;
                     for (var _i3 = 0; _i3 < survivors.length; _i3++) {
@@ -53343,7 +53347,7 @@ var BattleDisplay = function (_Component) {
                                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
                                     victoryString,
                                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
-                                    "Survivors: ",
+                                    "Survivors (on losing team): ",
                                     survivorsString
                                 )
                             )

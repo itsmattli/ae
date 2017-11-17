@@ -14,13 +14,15 @@ class BattleDisplay extends Component {
             survivors: props.survivors,
             victors: props.victors,
             gameOver: props.gameOver,
+            battles: props.battles,
         }
     }
     componentWillReceiveProps(props) {
         this.setState({
             survivors: props.survivors,
             victors: props.victors,
-            gameOver: props.gameOver
+            gameOver: props.gameOver,
+            battles: props.battles,
         })
     }
 
@@ -28,11 +30,11 @@ class BattleDisplay extends Component {
         const gameOver = this.state.gameOver
         const survivors = this.state.survivors
         const victors = this.state.victors
+        const battles = this.state.battles
         let autoVic = 0;
         let autoVicString = "";
         let decVic = 0;
         let decVicString = "";
-        var battles = 0;
         var survivorsString = "";
         var victoryString = "";
         var display = [];
@@ -68,7 +70,6 @@ class BattleDisplay extends Component {
                 }
             }
             if (autoVic > decVic) {
-                battles = autoVic
                 victoryString = "Winning Team(Autobots): " + autoVicString
                 videoId = "A52--FKUQgU"
                 for(let i = 0; i < survivors.length; i++) {
@@ -77,7 +78,6 @@ class BattleDisplay extends Component {
                     }
                 }
             } else if (decVic > autoVic) {
-                battles = decVic
                 victoryString = "Winning Team(Decepticon): " + decVicString
                 videoId = "VMUjcr87XfM"
                 for(let i = 0; i < survivors.length; i++) {
@@ -86,7 +86,6 @@ class BattleDisplay extends Component {
                     }
                 }
             } else {
-                battles = autoVic
                 victoryString = "Tie!"
                 videoId = null
                 for (let i = 0; i < survivors.length; i++) {
@@ -105,7 +104,7 @@ class BattleDisplay extends Component {
                                     <br />
                                     {victoryString}
                                     <br />
-                                    Survivors: {survivorsString}
+                                    Survivors (on losing team): {survivorsString}
                                 </div>
                             </div>
                         </div>

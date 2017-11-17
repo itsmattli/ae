@@ -13,7 +13,7 @@ const customStyles = {
         bottom                : 'auto',
         marginRight           : '-25%',
         transform             : 'translate(-50%, -50%)',
-        height                : '400px',
+        height                : '450px',
         width                 : '700px'
     }
 };
@@ -42,6 +42,7 @@ class Launch extends Component {
             createData: [],
             victors: [],
             survivors: [],
+            battles: 0,
             gameOver: false,
             modalIsOpen: false,
             battleComplete: false,
@@ -186,6 +187,7 @@ class Launch extends Component {
      * @param e
      */
     battle(e) {
+        var battles = 0;
         e.preventDefault()
         let decRoster = this.state.decepticons
         let autRoster = this.state.autobots
@@ -194,6 +196,7 @@ class Launch extends Component {
         let victors = []
 
         for (let i = 0; i < count; i++) {
+            battles++;
             let battleStatus = this.matrixOfLeadershipCheck(autRoster[i], decRoster[i])
             if (battleStatus == status.BATTLE_ON) {
                 battleStatus = this.courStrSklCheck(autRoster[i], decRoster[i])
@@ -210,8 +213,8 @@ class Launch extends Component {
                     victors.push(decRoster[i])
                     break
                 case status.GAME_OVER :
-                    console.log("game over");
                     this.setState({
+                        battles: battles,
                         battleComplete: true,
                         gameOver: true
                     })
@@ -224,6 +227,7 @@ class Launch extends Component {
             survivors.push(longer[i])
         }
         this.setState({
+            battles: battles,
             battleComplete: true,
             gameOver : false,
             victors : victors,
@@ -414,6 +418,7 @@ class Launch extends Component {
                         victors={this.state.victors}
                         survivors={this.state.survivors}
                         gameOver={this.state.gameOver}
+                        battles={this.state.battles}
                     />
                 }
             </div>
