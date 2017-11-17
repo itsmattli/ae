@@ -180,10 +180,12 @@ class Launch extends Component {
                     victors.push(decRoster[i])
                     break
                 case status.GAME_OVER :
+                    console.log("game over");
                     this.setState({
                         battleComplete: true,
                         gameOver: true
                     })
+                    return;
                 default: break
             }
         }
@@ -193,7 +195,9 @@ class Launch extends Component {
         }
         this.setState({
             battleComplete: true,
-            gameOver : false
+            gameOver : false,
+            victors : victors,
+            survivors : survivors,
         })
     }
 
@@ -274,9 +278,11 @@ class Launch extends Component {
                     <div className="create">
                         <button className="btn btn-primary" onClick={this.openModal}>Create Transformer</button>
                     </div>
+                    <br />
                     <div className="battle">
                         <button className="btn btn-success" onClick={this.battle.bind(this)}>Battle!</button>
                     </div>
+                    <br />
                 </div>
                 <div className="row">
                     <Modal
@@ -358,13 +364,11 @@ class Launch extends Component {
                     />
                 </div>
                 {battleComplete &&
-                    <div className="row">
-                        <BattleDisplay
-                            victors={this.state.victors}
-                            survivors={this.state.survivors}
-                            gameOver={this.state.gameOver}
-                        />
-                    </div>
+                    <BattleDisplay
+                        victors={this.state.victors}
+                        survivors={this.state.survivors}
+                        gameOver={this.state.gameOver}
+                    />
                 }
             </div>
         );

@@ -8,6 +8,6 @@ class Autobot extends Model
 {
     public $timestamps = false;
     protected $fillable = [
-        'name', 'strength', 'intelligence', 'speed', 'endurance', 'rank', 'courage', 'firepower', 'skill',
+        'name', 'faction', 'strength', 'intelligence', 'speed', 'endurance', 'rank', 'courage', 'firepower', 'skill',
     ];
 }

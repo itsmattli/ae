@@ -28,6 +28,7 @@ class AutobotsController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $data['faction'] = "A";
         Autobot::create($data);
         $message = array("success" => "autobot deleted");
 

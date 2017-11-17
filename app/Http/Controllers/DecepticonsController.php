@@ -28,6 +28,7 @@ class DecepticonsController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $data['faction'] = "D";
         Decepticon::create($data);
         $message = array("success" => "decepticon deleted");
 

@@ -20,6 +20,7 @@
         "vue": "^2.1.10"
     },
     "dependencies": {
-        "react-modal": "^3.1.2"
+        "react-modal": "^3.1.2",
+        "react-youtube": "^7.5.0"
     }
 }

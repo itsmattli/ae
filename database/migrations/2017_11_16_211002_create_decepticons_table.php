@@ -16,6 +16,7 @@ class CreateDecepticonsTable extends Migration
         Schema::create('decepticons', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('faction');
             $table->integer('strength');
             $table->integer('intelligence');
             $table->integer('speed');

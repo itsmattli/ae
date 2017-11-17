@@ -64,6 +64,9 @@
 <script src="{{ mix('js/app.js') }}"></script>
 <script>
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    window.YTConfig = {
+        host: 'https://www.youtube.com'
+    }
 </script>
 @yield('scripts')
 
