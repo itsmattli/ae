@@ -29,8 +29,8 @@ class CastlesController extends Controller
         $landscape = str_getcsv($input, $delimiter);
 
         foreach ($landscape as $elevation) {
-            if(!is_numeric($elevation) && $elevation >= 0){
-                return redirect()->back()->with("error", "Sorry, only positive integer values are allowed");
+            if(!is_numeric($elevation) || $elevation < 0){
+                return redirect('/castles')->with("errors", "Sorry, only positive integer values are allowed");
             }
         }
         return $landscape;
