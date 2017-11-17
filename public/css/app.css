@@ -65,8 +65,6 @@ abbr[title] {
   border-bottom: 1px dotted;
 }
 
-
-
 b,
 strong {
   font-weight: bold;
@@ -8351,13 +8349,4 @@ button.close {
     display: none !important;
   }
 }
-
-
-.icons {
-  text-align: center;
-  margin:auto;
-  font-size: 30px;
-}
-
-
 

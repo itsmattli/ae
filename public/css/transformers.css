@@ -1,0 +1,37 @@
+.create {
+    text-align: center;
+    margin: auto;
+}
+
+.battle {
+    text-align: center;
+    margin: auto;
+}
+
+input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+label {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+select {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+td {
+    vertical-align: middle;
+}
+
+.youtube {
+    margin: auto;
+    text-align: center;
+}
+
+.body {
+    font-size: 14px;
+}
+{
+
+}
