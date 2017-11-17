@@ -16,25 +16,38 @@ class Decepticons extends Component {
         this.parseRoster(props.data);
     }
 
+    /**
+     * Parse data for display by component
+     * @param data
+     */
     parseRoster(data){
-        let decepticons = data.map((decepticons) => {
+        let decepticons = data.map((decepticon) => {
             return(
-                <tr key={decepticons.id}>
-                    <td>{decepticons.name}</td>
-                    <td>{decepticons.strength}</td>
-                    <td>{decepticons.intelligence}</td>
-                    <td>{decepticons.endurance}</td>
-                    <td>{decepticons.rank}</td>
-                    <td>{decepticons.courage}</td>
-                    <td>{decepticons.firepower}</td>
-                    <td>{decepticons.skill}</td>
+                <tr key={decepticon.id}>
+                    <td>{decepticon.name}</td>
+                    <td>{decepticon.strength}</td>
+                    <td>{decepticon.intelligence}</td>
+                    <td>{decepticon.endurance}</td>
+                    <td>{decepticon.rank}</td>
+                    <td>{decepticon.courage}</td>
+                    <td>{decepticon.firepower}</td>
+                    <td>{decepticon.skill}</td>
                     <td>
-                        {/*<i onClick={(e) => this.deleteDecepticon(decepticon.id, e)} className="fa fa-trash-o fa-lg"></i>*/}
+                        {<i onClick={(e) => this.delete(decepticon.id, e)} className="fa fa-trash-o fa-lg"></i>}
                     </td>
                 </tr>
             )
         });
         this.setState({roster: decepticons})
+    }
+
+    /**
+     * contains a function callback for the parent deleteDecepticon()
+     * @param id
+     * @param e
+     */
+    delete(id, e) {
+        this.props.deleteDecepticon(id,e)
     }
 
     render() {
@@ -57,7 +70,7 @@ class Decepticons extends Component {
                             </tr>
                             </thead>
                             <tbody>
-                            {this.state.roster}
+                                {this.state.roster}
                             </tbody>
                         </table>
                     </div>

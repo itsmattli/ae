@@ -69,7 +69,8 @@ class Launch extends Component {
         var url = "";
         e.preventDefault()
         const createData = new FormData(e.target)
-        if (createData.get('faction') == 'A') {
+        let faction = createData.get('faction')
+        if (faction == 'A') {
             url = '/autobots'
         } else {
             url = '/decepticons'
@@ -83,16 +84,23 @@ class Launch extends Component {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrf_token
             }
-        }).then(results => {
-            console.log(results)
+        }).then(response => {
+            if (response.ok) {
+                if (faction == 'A') {
+                    this.getAutobots();
+                } else {
+                    this.getDecepticons();
+                }
+            }
         })
+        this.setState({ modalIsOpen: false})
     }
 
     stringifyFormData(fd) {
-    const data = {};
-        for (let key of fd.keys()) {
-            data[key] = fd.get(key);
-        }
+        const data = {};
+            for (let key of fd.keys()) {
+                data[key] = fd.get(key);
+            }
     return JSON.stringify(data, null, 2);
     }
 
@@ -124,11 +132,27 @@ class Launch extends Component {
         })
     }
 
+    battle(e) {
+        e.preventDefault();
+        let decRoster = JSON.parse(this.state.decepticons)
+        let autRoster = JSON.parse(this.state.autobots)
+        let count = (decRoster.count() < autRoster.count()) ? decRoster.count : autRoster.count();
+        console.log(count);
+        console.log(autRoster)
+        console.log(decRoster)
+    }
+
+
     render() {
         return (
             <div>
-                <div className="create">
-                    <button className="btn btn-primary" onClick={this.openModal}>Create Transformer</button>
+                <div class="row">
+                    <div className="create">
+                        <button className="btn btn-primary" onClick={this.openModal}>Create Transformer</button>
+                    </div>
+                    <div className="battle">
+                        <button className="btn btn-success" onClick={this.battle.bind(this)}>Battle!</button>
+                    </div>
                 </div>
                 <div className="row">
                     <Modal
@@ -139,8 +163,8 @@ class Launch extends Component {
                     >
                         <form onSubmit={this.createTransformer}>
                             <div className="form-group">
-                                <label htmlFor="name">Enter Name</label>
-                                <input className="form-control" id="name" name="name" type="text" />
+                                <label htmlFor="name">Transformer Name</label>
+                                <input className="form-control" id="name" name="name" type="text" required />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="class">Select Faction</label>
@@ -195,17 +219,18 @@ class Launch extends Component {
                                 <button className="btn btn-primary">Create</button>
                             </div>
                         </form>
+                        <button className="btn btn-primary" onClick={this.closeModal}>Close</button>
                     </Modal>
                 </div>
 
                 <div className="row">
                     <Autobots
                         data={this.state.autobots}
-                        delete={this.deleteAutobot.bind(this)}
+                        deleteAutobot={this.deleteAutobot.bind(this)}
                     />
                     <Decepticons
                         data={this.state.decepticons}
-                        delete={this.deleteDecepticon.bind(this)}
+                        deleteDecepticon={this.deleteDecepticon.bind(this)}
                     />
                 </div>
             </div>

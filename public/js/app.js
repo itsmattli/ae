@@ -32160,10 +32160,13 @@ var Launch = function (_Component) {
     }, {
         key: 'createTransformer',
         value: function createTransformer(e) {
+            var _this4 = this;
+
             var url = "";
             e.preventDefault();
             var createData = new FormData(e.target);
-            if (createData.get('faction') == 'A') {
+            var faction = createData.get('faction');
+            if (faction == 'A') {
                 url = '/autobots';
             } else {
                 url = '/decepticons';
@@ -32177,9 +32180,16 @@ var Launch = function (_Component) {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrf_token
                 }
-            }).then(function (results) {
-                console.log(results);
+            }).then(function (response) {
+                if (response.ok) {
+                    if (faction == 'A') {
+                        _this4.getAutobots();
+                    } else {
+                        _this4.getDecepticons();
+                    }
+                }
             });
+            this.setState({ modalIsOpen: false });
         }
     }, {
         key: 'stringifyFormData',
@@ -32215,7 +32225,7 @@ var Launch = function (_Component) {
     }, {
         key: 'deleteDecepticon',
         value: function deleteDecepticon(id, e) {
-            var _this4 = this;
+            var _this5 = this;
 
             e.preventDefault();
             fetch('api/decepticons/' + id, {
@@ -32225,14 +32235,14 @@ var Launch = function (_Component) {
                 }
             }).then(function (response) {
                 if (response.ok) {
-                    _this4.getDecepticons();
+                    _this5.getDecepticons();
                 }
             });
         }
     }, {
         key: 'deleteAutobot',
         value: function deleteAutobot(id, e) {
-            var _this5 = this;
+            var _this6 = this;
 
             e.preventDefault();
             fetch('api/autobots/' + id, {
@@ -32242,9 +32252,20 @@ var Launch = function (_Component) {
                 }
             }).then(function (response) {
                 if (response.ok) {
-                    _this5.getAutobots();
+                    _this6.getAutobots();
                 }
             });
+        }
+    }, {
+        key: 'battle',
+        value: function battle(e) {
+            e.preventDefault();
+            var decRoster = JSON.parse(this.state.decepticons);
+            var autRoster = JSON.parse(this.state.autobots);
+            var count = decRoster.count() < autRoster.count() ? decRoster.count : autRoster.count();
+            console.log(count);
+            console.log(autRoster);
+            console.log(decRoster);
         }
     }, {
         key: 'render',
@@ -32254,11 +32275,24 @@ var Launch = function (_Component) {
                 null,
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { className: 'create' },
+                    { 'class': 'row' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'button',
-                        { className: 'btn btn-primary', onClick: this.openModal },
-                        'Create Transformer'
+                        'div',
+                        { className: 'create' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            { className: 'btn btn-primary', onClick: this.openModal },
+                            'Create Transformer'
+                        )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'battle' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            { className: 'btn btn-success', onClick: this.battle.bind(this) },
+                            'Battle!'
+                        )
                     )
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -32281,9 +32315,9 @@ var Launch = function (_Component) {
                                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                     'label',
                                     { htmlFor: 'name' },
-                                    'Enter Name'
+                                    'Transformer Name'
                                 ),
-                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: 'form-control', id: 'name', name: 'name', type: 'text' })
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: 'form-control', id: 'name', name: 'name', type: 'text', required: true })
                             ),
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'div',
@@ -32417,6 +32451,11 @@ var Launch = function (_Component) {
                                     'Create'
                                 )
                             )
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            { className: 'btn btn-primary', onClick: this.closeModal },
+                            'Close'
                         )
                     )
                 ),
@@ -32425,11 +32464,11 @@ var Launch = function (_Component) {
                     { className: 'row' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Autobots_js__["a" /* default */], {
                         data: this.state.autobots,
-                        'delete': this.deleteAutobot.bind(this)
+                        deleteAutobot: this.deleteAutobot.bind(this)
                     }),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Decepticons_js__["a" /* default */], {
                         data: this.state.decepticons,
-                        'delete': this.deleteDecepticon.bind(this)
+                        deleteDecepticon: this.deleteDecepticon.bind(this)
                     })
                 )
             );
@@ -51904,57 +51943,83 @@ var Decepticons = function (_Component) {
         value: function componentWillReceiveProps(props) {
             this.parseRoster(props.data);
         }
+
+        /**
+         * Parse data for display by component
+         * @param data
+         */
+
     }, {
         key: "parseRoster",
         value: function parseRoster(data) {
-            var decepticons = data.map(function (decepticons) {
+            var _this2 = this;
+
+            var decepticons = data.map(function (decepticon) {
                 return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     "tr",
-                    { key: decepticons.id },
+                    { key: decepticon.id },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        decepticons.name
+                        decepticon.name
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        decepticons.strength
+                        decepticon.strength
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        decepticons.intelligence
+                        decepticon.intelligence
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        decepticons.endurance
+                        decepticon.endurance
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        decepticons.rank
+                        decepticon.rank
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        decepticons.courage
+                        decepticon.courage
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        decepticons.firepower
+                        decepticon.firepower
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        decepticons.skill
+                        decepticon.skill
                     ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("td", null)
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        "td",
+                        null,
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("i", { onClick: function onClick(e) {
+                                return _this2.delete(decepticon.id, e);
+                            }, className: "fa fa-trash-o fa-lg" })
+                    )
                 );
             });
             this.setState({ roster: decepticons });
+        }
+
+        /**
+         * contains a function callback for the parent deleteDecepticon()
+         * @param id
+         * @param e
+         */
+
+    }, {
+        key: "delete",
+        value: function _delete(id, e) {
+            this.props.deleteDecepticon(id, e);
         }
     }, {
         key: "render",
@@ -52083,57 +52148,83 @@ var Autobots = function (_Component) {
         value: function componentWillReceiveProps(props) {
             this.parseRoster(props.data);
         }
+
+        /**
+         * Parses the data recieved as a prop for display in this component
+         * @param data
+         */
+
     }, {
         key: "parseRoster",
         value: function parseRoster(data) {
-            var autobots = data.map(function (autobots) {
+            var _this2 = this;
+
+            var autobots = data.map(function (autobot) {
                 return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     "tr",
-                    { key: autobots.id },
+                    { key: autobot.id },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        autobots.name
+                        autobot.name
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        autobots.strength
+                        autobot.strength
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        autobots.intelligence
+                        autobot.intelligence
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        autobots.endurance
+                        autobot.endurance
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        autobots.rank
+                        autobot.rank
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        autobots.courage
+                        autobot.courage
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        autobots.firepower
+                        autobot.firepower
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "td",
                         null,
-                        autobots.skill
+                        autobot.skill
                     ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("td", null)
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        "td",
+                        null,
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("i", { onClick: function onClick(e) {
+                                return _this2.delete(autobot.id, e);
+                            }, className: "fa fa-trash-o fa-lg" })
+                    )
                 );
             });
             this.setState({ roster: autobots });
+        }
+
+        /**
+         * contains a function callback for the parent deleteAutobot()
+         * @param id
+         * @param e
+         */
+
+    }, {
+        key: "delete",
+        value: function _delete(id, e) {
+            this.props.deleteAutobot(id, e);
         }
     }, {
         key: "render",

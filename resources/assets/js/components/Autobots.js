@@ -19,25 +19,38 @@ class Autobots extends Component {
         this.parseRoster(props.data);
     }
 
+    /**
+     * Parses the data recieved as a prop for display in this component
+     * @param data
+     */
     parseRoster(data){
-        let autobots = data.map((autobots) => {
+        let autobots = data.map((autobot) => {
             return(
-                <tr key={autobots.id}>
-                    <td>{autobots.name}</td>
-                    <td>{autobots.strength}</td>
-                    <td>{autobots.intelligence}</td>
-                    <td>{autobots.endurance}</td>
-                    <td>{autobots.rank}</td>
-                    <td>{autobots.courage}</td>
-                    <td>{autobots.firepower}</td>
-                    <td>{autobots.skill}</td>
+                <tr key={autobot.id}>
+                    <td>{autobot.name}</td>
+                    <td>{autobot.strength}</td>
+                    <td>{autobot.intelligence}</td>
+                    <td>{autobot.endurance}</td>
+                    <td>{autobot.rank}</td>
+                    <td>{autobot.courage}</td>
+                    <td>{autobot.firepower}</td>
+                    <td>{autobot.skill}</td>
                     <td>
-                        {/*<i onClick={(e) => this.deleteDecepticon(decepticon.id, e)} className="fa fa-trash-o fa-lg"></i>*/}
+                        {<i onClick={(e) => this.delete(autobot.id, e)} className="fa fa-trash-o fa-lg"></i>}
                     </td>
                 </tr>
             )
         });
         this.setState({roster: autobots})
+    }
+
+    /**
+     * contains a function callback for the parent deleteAutobot()
+     * @param id
+     * @param e
+     */
+    delete(id, e) {
+        this.props.deleteAutobot(id,e)
     }
 
     render() {

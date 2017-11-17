@@ -29,8 +29,9 @@ class DecepticonsController extends Controller
     {
         $data = $request->all();
         Decepticon::create($data);
+        $message = array("success" => "decepticon deleted");
 
-        return response("Decepticon created!", 200);
+        return response()->json($message, 200);
     }
 
     /**
