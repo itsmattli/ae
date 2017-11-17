@@ -17,16 +17,5 @@ Route::get('/castles', 'PagesController@castles');
 Route::get('/transformers', 'PagesController@transformers');
 Route::post('/castles/calculate', 'CastlesController@calculate');
 
-//Autobots
-Route::resource('autobots', 'AutobotsController',
-    ['except' => [
-        'create', 'edit'
-    ]]
-);
-
-//Decepticons
-Route::resource('decepticons', 'DecepticonsController',
-    ['except' => [
-        'create', 'edit'
-    ]]
-);
+/*Route::post('/decepticons/{id}', 'DecepticonsController@destroy');
+Route::post('/autobots/{id}', 'AutobotsController@destroy');*/

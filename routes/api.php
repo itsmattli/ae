@@ -12,4 +12,14 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::resource('autobots', 'AutobotsController',
+    ['except' => [
+        'create', 'edit', 'update'
+    ]]
+);
 
+Route::resource('decepticons', 'DecepticonsController',
+    ['except' => [
+        'create', 'edit', 'update'
+    ]]
+);

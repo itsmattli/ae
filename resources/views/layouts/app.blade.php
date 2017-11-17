@@ -62,8 +62,10 @@
         </footer>
     </div>
 <script src="{{ mix('js/app.js') }}"></script>
-
-
+<script>
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+</script>
 @yield('scripts')
+
 </body>
 </html>
