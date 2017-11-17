@@ -14,7 +14,7 @@ class DecepticonsController extends Controller
      */
     public function index()
     {
-        $decepticons = Decepticon::all();
+        $decepticons = Decepticon::orderBy('rank', 'desc')->get();
         return response()->json($decepticons, 200);
     }
 

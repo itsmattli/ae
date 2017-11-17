@@ -52505,8 +52505,17 @@ var BattleDisplay = function (_Component) {
                 var display = function display() {
                     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "div",
-                        null,
-                        "working"
+                        { className: "panel panel-default" },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "div",
+                            { className: "panel-heading" },
+                            "Battle Results"
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "div",
+                            { className: "panel-body" },
+                            "Optimus fought Predaking"
+                        )
                     );
                 };
                 this.setState({

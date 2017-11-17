@@ -29,8 +29,11 @@ class BattleDisplay extends Component {
         if(gameOver) {
             let display = () => {
                 return(
-                    <div>
-                        working
+                    <div className="panel panel-default">
+                        <div className="panel-heading">Battle Results</div>
+                        <div className="panel-body">
+                            Optimus fought Predaking
+                        </div>
                     </div>
                 )
             }

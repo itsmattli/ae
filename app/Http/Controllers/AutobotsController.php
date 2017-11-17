@@ -14,7 +14,7 @@ class AutobotsController extends Controller
      */
     public function index()
     {
-        $autobots = Autobot::all();
+        $autobots = Autobot::orderBy('rank', 'desc')->get();;
         return response()->json($autobots, 200);
     }
 
