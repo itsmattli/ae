@@ -1,15 +1,15 @@
 @extends('layouts.app')
 @section('pageTitle', 'Matthew Li - Web Developer')
 @section('css')
-    <link rel="stylesheet" href="../css/castles.css">
+    <link rel="stylesheet" href="{{asset('css/castles.css')}}">
 @endsection
 
 @section('content')
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                @if(session('error'))
-                    <p class="alert {{ Session::get('alert-class', 'alert-danger') }}">{{ Session::get('error') }}</p>
+                @if(session('errors'))
+                    <p class="alert {{ Session::get('alert-class', 'alert-danger') }}">{{ Session::get('errors') }}</p>
                 @endif
                 <div class="panel panel-default">
                     <div class="panel-heading">Castle Builder</div>
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    @if(!session('error') && isset($castleCount))
+    @if(!session('errors') && isset($castleCount))
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">

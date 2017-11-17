@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('pageTitle', 'Matthew Li - Web Developer')
 @section('css')
-    <link rel="stylesheet" href="../css/transformers.css">
+    <link rel="stylesheet" href="{{asset('css/transformers.css')}}">
 @endsection
 @section('content')
     <div>
