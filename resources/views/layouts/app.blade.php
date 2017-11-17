@@ -34,15 +34,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         <li><a href="/castles">Castles</a></li>
-                        <li><a data-toggle="collapse" href="#transformers">Transformers</a></li>
-                        <ul id="transformers" class="collapse nav navbar-nav">
-                            <li>
-                                <a href="/transformers">Roster</a>
-                            </li>
-                            <li>
-                                <a href="/battle">Battle</a>
-                            </li>
-                        </ul>
+                        <li><a href="/transformers">Transformers</a></li>
                     </ul>
                 </div>
             </div>

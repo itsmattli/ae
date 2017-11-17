@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class CastlesController extends Controller
 {
+    /**
+     * Take form data and begins calculation process
+     * @param Request $req
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function calculate(Request $req)
     {
         $landscape = $this->validateInput($req->landscape);
@@ -13,6 +18,11 @@ class CastlesController extends Controller
         return view('castles', compact('castleCount'));
     }
 
+    /**
+     * Validates to make sure input is a CSV of numbers
+     * @param $input
+     * @return array|\Illuminate\Http\RedirectResponse
+     */
     public function validateInput($input)
     {
         $delimiter = ",";
@@ -26,6 +36,11 @@ class CastlesController extends Controller
         return $landscape;
     }
 
+    /**
+     * calculates number of castles that should be built
+     * @param $landscape
+     * @return int
+     */
     public function calculateCastles($landscape)
     {
         $castleCount = 0;

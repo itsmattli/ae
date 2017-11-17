@@ -33284,6 +33284,11 @@ var Launch = function (_Component) {
             this.getAutobots();
             this.getDecepticons();
         }
+
+        /**
+         * Makes http request for Autobots
+         */
+
     }, {
         key: 'getAutobots',
         value: function getAutobots() {
@@ -33295,6 +33300,11 @@ var Launch = function (_Component) {
                 _this2.setState({ autobots: data });
             });
         }
+
+        /**
+         * Makes http request for Decepticons
+         */
+
     }, {
         key: 'getDecepticons',
         value: function getDecepticons() {
@@ -33306,16 +33316,32 @@ var Launch = function (_Component) {
                 _this3.setState({ decepticons: data });
             });
         }
+
+        /**
+         * Opens create transformer modal
+         */
+
     }, {
         key: 'openModal',
         value: function openModal() {
             this.setState({ modalIsOpen: true });
         }
+
+        /**
+         * Closes create transformer modal
+         */
+
     }, {
         key: 'closeModal',
         value: function closeModal() {
             this.setState({ modalIsOpen: false });
         }
+
+        /**
+         * Makes HTTP post request to create a transformer
+         * @param e
+         */
+
     }, {
         key: 'createTransformer',
         value: function createTransformer(e) {
@@ -33350,6 +33376,12 @@ var Launch = function (_Component) {
             });
             this.setState({ modalIsOpen: false });
         }
+
+        /**
+         * Strigify's FormData object
+         * @param fd
+         */
+
     }, {
         key: 'stringifyFormData',
         value: function stringifyFormData(fd) {
@@ -33381,6 +33413,13 @@ var Launch = function (_Component) {
 
             return JSON.stringify(data, null, 2);
         }
+
+        /**
+         * Makes HTTP delete request
+         * @param id
+         * @param e
+         */
+
     }, {
         key: 'deleteDecepticon',
         value: function deleteDecepticon(id, e) {
@@ -33398,6 +33437,13 @@ var Launch = function (_Component) {
                 }
             });
         }
+
+        /**
+         * Makes HTTP delete request
+         * @param id
+         * @param e
+         */
+
     }, {
         key: 'deleteAutobot',
         value: function deleteAutobot(id, e) {
@@ -33469,6 +33515,14 @@ var Launch = function (_Component) {
                 survivors: survivors
             });
         }
+
+        /**
+         * Checks to see if Optimus Prime or Predaking are fighting
+         * @param autobot
+         * @param decepticon
+         * @returns {*}
+         */
+
     }, {
         key: 'matrixOfLeadershipCheck',
         value: function matrixOfLeadershipCheck(autobot, decepticon) {
@@ -33482,6 +33536,14 @@ var Launch = function (_Component) {
                 return status.BATTLE_ON;
             }
         }
+
+        /**
+         * Checks for large differences between courage, strength and skill
+         * @param autobot
+         * @param decepticon
+         * @returns {*}
+         */
+
     }, {
         key: 'courStrSklCheck',
         value: function courStrSklCheck(autobot, decepticon) {
@@ -33528,6 +33590,14 @@ var Launch = function (_Component) {
                     break;
             }
         }
+
+        /**
+         * Tallies and compares overall might of transformers
+         * @param autobot
+         * @param decepticon
+         * @returns {*}
+         */
+
     }, {
         key: 'overallMight',
         value: function overallMight(autobot, decepticon) {
@@ -53162,29 +53232,6 @@ var BattleDisplay = function (_Component) {
                 gameOver: props.gameOver
             });
         }
-
-        /*    processDisplay() {
-                let gameOver = this.state.gameOver
-                let survivors = this.state.survivors
-                let victors = this.state.victors
-                if(gameOver) {
-                    let display = () => {
-                        return(
-                            <div className="panel panel-default">
-                                <div className="panel-heading">Battle Results</div>
-                                <div className="panel-body">
-                                    Optimus fought Predaking: Game Over!
-        
-                                </div>
-                            </div>
-                        )
-                    }
-                    this.setState({
-                        display: display
-                    })
-                }
-            }*/
-
     }, {
         key: "render",
         value: function render() {

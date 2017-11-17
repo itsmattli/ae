@@ -57,6 +57,9 @@ class Launch extends Component {
         this.getDecepticons();
     }
 
+    /**
+     * Makes http request for Autobots
+     */
     getAutobots() {
         fetch('api/autobots')
             .then(results => {
@@ -67,6 +70,9 @@ class Launch extends Component {
     }
 
 
+    /**
+     * Makes http request for Decepticons
+     */
     getDecepticons() {
         fetch('api/decepticons')
             .then(results => {
@@ -76,14 +82,24 @@ class Launch extends Component {
         })
     }
 
+    /**
+     * Opens create transformer modal
+     */
     openModal() {
         this.setState({modalIsOpen: true});
     }
 
+    /**
+     * Closes create transformer modal
+     */
     closeModal() {
         this.setState({modalIsOpen: false});
     }
 
+    /**
+     * Makes HTTP post request to create a transformer
+     * @param e
+     */
     createTransformer(e) {
         var url = "";
         e.preventDefault()
@@ -115,6 +131,10 @@ class Launch extends Component {
         this.setState({ modalIsOpen: false})
     }
 
+    /**
+     * Strigify's FormData object
+     * @param fd
+     */
     stringifyFormData(fd) {
         const data = {};
             for (let key of fd.keys()) {
@@ -123,6 +143,11 @@ class Launch extends Component {
     return JSON.stringify(data, null, 2);
     }
 
+    /**
+     * Makes HTTP delete request
+     * @param id
+     * @param e
+     */
     deleteDecepticon(id, e) {
         e.preventDefault();
         fetch('api/decepticons/' + id, {
@@ -137,6 +162,11 @@ class Launch extends Component {
         })
     }
 
+    /**
+     * Makes HTTP delete request
+     * @param id
+     * @param e
+     */
     deleteAutobot(id, e) {
         e.preventDefault();
         fetch('api/autobots/' + id, {
@@ -201,6 +231,12 @@ class Launch extends Component {
         })
     }
 
+    /**
+     * Checks to see if Optimus Prime or Predaking are fighting
+     * @param autobot
+     * @param decepticon
+     * @returns {*}
+     */
     matrixOfLeadershipCheck(autobot, decepticon) {
         if(autobot.name.toUpperCase() == "OPTIMUS PRIME" && decepticon.name.toUpperCase() == "PREDAKING") {
             return status.GAME_OVER
@@ -214,6 +250,12 @@ class Launch extends Component {
     }
 
 
+    /**
+     * Checks for large differences between courage, strength and skill
+     * @param autobot
+     * @param decepticon
+     * @returns {*}
+     */
     courStrSklCheck(autobot, decepticon) {
         let courDiff = autobot.courage - decepticon.courage
         let strDiff = autobot.strength - decepticon.strength
@@ -256,6 +298,12 @@ class Launch extends Component {
         }
     }
 
+    /**
+     * Tallies and compares overall might of transformers
+     * @param autobot
+     * @param decepticon
+     * @returns {*}
+     */
     overallMight(autobot, decepticon){
         let overallAut = autobot.strength + autobot.intelligence + autobot.speed + autobot.endurance + autobot.firepower
         let overallDec = decepticon.strength + decepticon.intelligence + decepticon.speed + decepticon.endurance + decepticon.firepower
@@ -267,8 +315,6 @@ class Launch extends Component {
             return status.DECEPTICON_WIN
         }
     }
-
-
 
     render() {
         const battleComplete = this.state.battleComplete

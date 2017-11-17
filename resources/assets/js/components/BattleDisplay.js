@@ -24,28 +24,6 @@ class BattleDisplay extends Component {
         })
     }
 
-/*    processDisplay() {
-        let gameOver = this.state.gameOver
-        let survivors = this.state.survivors
-        let victors = this.state.victors
-        if(gameOver) {
-            let display = () => {
-                return(
-                    <div className="panel panel-default">
-                        <div className="panel-heading">Battle Results</div>
-                        <div className="panel-body">
-                            Optimus fought Predaking: Game Over!
-
-                        </div>
-                    </div>
-                )
-            }
-            this.setState({
-                display: display
-            })
-        }
-    }*/
-
     render() {
         const gameOver = this.state.gameOver
         const survivors = this.state.survivors
